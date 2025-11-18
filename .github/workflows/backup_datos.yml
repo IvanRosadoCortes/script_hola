@@ -1,0 +1,27 @@
+   branches:
+      - main
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        # Permite al job acceder a los archivos del repo.
+
+      - name: Preparar carpeta backup
+        run: |
+mkdir -p backup
+cp -r datos backup/
+
+
+      - name: Comprimir carpeta datos
+        run: tar -czf backup.tar.gz backup
+       
+
+      - name: Subir artefacto
+        uses: actions/upload-artifact@v5
+        with:
+          name: copia-seguridad
+          path: backup.tar.gz
+          if-no-files-found: error
